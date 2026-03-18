@@ -1,0 +1,11 @@
+name: Chasm
+version: '$version'
+description: Provides the default Minecraft fonts for the Chasm library
+website: https://github.com/hboyd2003/Chasm
+authors: [ Harrison Boyd ]
+main: dev.hboyd.chasm.Chasm
+bootstrapper: dev.hboyd.chasm.ChasmBootstrapper
+has-open-classloader: true
+load: STARTUP
+api-version: '1.21.8'
+folia-supported: true
