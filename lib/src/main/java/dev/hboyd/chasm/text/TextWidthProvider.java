@@ -43,7 +43,7 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
     /**
      * Default instance with the default font as <code>minecraft:default</code> and using the global font registry.
      */
-    public static TextWidthProvider DEFAULT = new TextWidthProvider();
+    public static final TextWidthProvider DEFAULT = new TextWidthProvider();
 
     private static final float NODEF_WIDTH = 9.0f;
 
