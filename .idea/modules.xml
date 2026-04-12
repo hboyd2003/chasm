@@ -2,13 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chasm.iml" filepath="$PROJECT_DIR$/.idea/modules/chasm.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/chasm.chasm-lib.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/chasm.chasm-lib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/chasm.chasm-lib.main.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/chasm.chasm-lib.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/chasm.chasm-lib.test.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/chasm.chasm-lib.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugin/chasm.chasm-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/plugin/chasm.chasm-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugin/chasm.chasm-plugin.main.iml" filepath="$PROJECT_DIR$/.idea/modules/plugin/chasm.chasm-plugin.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugin/chasm.chasm-plugin.test.iml" filepath="$PROJECT_DIR$/.idea/modules/plugin/chasm.chasm-plugin.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/dev.hboyd.chasm.chasm-lib.main.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/dev.hboyd.chasm.chasm-lib.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/dev.hboyd.chasm.chasm-lib.test.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/dev.hboyd.chasm.chasm-lib.test.iml" />
     </modules>
   </component>
 </project>

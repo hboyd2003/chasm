@@ -1,7 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="GPLv3 - Harrison Boyd">
+  <settings default="LGPLv3 - Harrison Boyd">
     <module2copyright>
-      <element module="All" copyright="GPLv3 - Harrison Boyd" />
+      <element module="All" copyright="LGPLv3 - Harrison Boyd" />
     </module2copyright>
   </settings>
 </component>
