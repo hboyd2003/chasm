@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.hboyd:chasm-lib:1.0.0")
+    implementation("dev.hboyd:chasm-lib:1.0.1")
 }
 ```
 
