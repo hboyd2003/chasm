@@ -228,8 +228,16 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
     @Contract("_ -> new")
     private static ComponentFlattener buildFlattener(Locale locale) {
         return ComponentFlattener.basic().toBuilder()
-                .complexMapper(TranslatableComponent.class, (translatableComponent, componentConsumer) ->
-                        componentConsumer.accept(GlobalTranslator.render(translatableComponent, locale)))
+                .complexMapper(TranslatableComponent.class, (component, componentConsumer) -> {
+                    Component renderedComponent = GlobalTranslator.render(component, locale);
+                    // We need to check if the translation failed to render
+                    if (renderedComponent instanceof TranslatableComponent translatableComponent) {
+                        String fallback = translatableComponent.fallback();
+                        if (fallback == null) fallback = translatableComponent.key();
+
+                        componentConsumer.accept(Component.text(fallback, translatableComponent.style()));
+                    } else componentConsumer.accept(renderedComponent);
+                })
                 .build();
     }
 
