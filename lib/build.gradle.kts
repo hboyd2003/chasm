@@ -1,9 +1,16 @@
+plugins {
+    id("chasm.java-conventions")
+    `java-library`
+}
+
 dependencies {
-    implementation(libs.checkerFramework)
     implementation(libs.guava)
-    implementation(libs.bundles.adventureAPI)
     implementation(libs.gson)
-    implementation(libs.examinationAPI)
+
+    api(libs.checkerFramework)
+    api(libs.jspecify)
+    api(libs.bundles.adventureAPI)
+    api(libs.examinationAPI)
 }
 
 publishing {

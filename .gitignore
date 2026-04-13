@@ -7,3 +7,5 @@
 /plugin/build/
 /plugin/build/classes/java/main/
 /plugin/run/
+/build-logic/.gradle/
+/build-logic/build/
