@@ -2,7 +2,7 @@
 minecraft = "1.21.8"
 
 # Gradle Plugins
-gradleShadow = "9.3.1"
+gradleShadow = "9.5.1"
 runPaper = "2.3.1"
 paperLoaderGen = "1.0.0"
 
