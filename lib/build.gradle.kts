@@ -12,11 +12,3 @@ dependencies {
     api(libs.bundles.adventureAPI)
     api(libs.examinationAPI)
 }
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
-        }
-    }
-}

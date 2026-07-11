@@ -15,6 +15,14 @@ dependencyResolutionManagement {
             name = "papermc-repo-snapshots"
             mavenContent { snapshotsOnly() }
         }
+        maven(url = "https://repo.hboyd.dev/releases/") {
+            name = "hboyd-dev-repo-releases"
+            mavenContent { releasesOnly() }
+        }
+        maven(url = "https://repo.hboyd.dev/snapshots/") {
+            name = "hboyd-dev-repo-snapshots"
+            mavenContent { snapshotsOnly() }
+        }
         maven(url = "https://repo.codemc.io/repository/maven-releases/") {
             name = "codemc-releases"
             mavenContent { releasesOnly() }

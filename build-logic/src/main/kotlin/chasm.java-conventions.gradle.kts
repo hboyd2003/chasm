@@ -1,38 +1,36 @@
 val libs = extensions.getByType(org.gradle.accessors.dm.LibrariesForLibs::class)
 
 plugins {
-    java
-    `maven-publish`
     idea
+    id("net.kyori.indra")
+    id("net.kyori.indra.publishing")
 }
 
 dependencies {
     compileOnly(libs.jspecify)
 }
 
-val targetJavaVersion = 25
-java {
-    withJavadocJar()
-    withSourcesJar()
-
-    val javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+indra {
+    javaVersions {
+        target(25)
     }
-}
 
-publishing {
-    repositories {
-        maven {
-            credentials {
-                username = System.getenv("HBOYD_DEV_REPO_USERNAME")
-                password = System.getenv("HBOYD_DEV_REPO_PASSWORD")
+    github("hboyd2003", "chasm") {
+        ci(true)
+        scm(true)
+        publishing(true)
+    }
+
+    configurePublications {
+        pom {
+            developers {
+                developer {
+                    id = "hboyd2003"
+                    name = "Harrison Boyd"
+                    email = "8950185+hboyd2003@users.noreply.github.com"
+                    timezone = "America/New_York"
+                }
             }
-
-            name = "hboyd-dev-repo"
-            url = uri("https://repo.hboyd.dev/" + (if (version.toString().contains("SNAPSHOT")) "snapshots/" else "releases/"))
         }
     }
 }
