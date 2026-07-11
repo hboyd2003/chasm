@@ -33,6 +33,8 @@ indra {
             }
         }
     }
+
+    signWithKeyFromPrefixedProperties("hboyd")
 }
 
 idea {
