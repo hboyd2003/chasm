@@ -5,6 +5,7 @@ website: https://github.com/hboyd2003/Chasm
 authors: [ Harrison Boyd ]
 main: dev.hboyd.chasm.Chasm
 bootstrapper: dev.hboyd.chasm.ChasmBootstrapper
+loader: dev.hboyd.chasm.ChasmLoader
 has-open-classloader: true
 load: STARTUP
 api-version: '1.21.8'
