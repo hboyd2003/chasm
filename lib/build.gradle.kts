@@ -12,3 +12,8 @@ dependencies {
     api(libs.bundles.adventureAPI)
     api(libs.examinationAPI)
 }
+
+indra {
+    publishReleasesTo("hboydDev", "https://repo.hboyd.dev/releases")
+    publishSnapshotsTo("hboydDev", "https://repo.hboyd.dev/snapshots")
+}
