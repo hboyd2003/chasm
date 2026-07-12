@@ -37,7 +37,7 @@ public class StyledGlyph {
      * @param style the style
      */
     @Contract(pure = true)
-    public StyledGlyph(char character, Style style) {
+    public StyledGlyph(final char character, final Style style) {
         this.codepoint = character;
         this.style = style;
     }
@@ -48,7 +48,7 @@ public class StyledGlyph {
      * @param character the character
      */
     @Contract(pure = true)
-    public StyledGlyph(char character) {
+    public StyledGlyph(final char character) {
         this(character, Style.empty());
     }
 
@@ -59,7 +59,7 @@ public class StyledGlyph {
      * @param style the style
      */
     @Contract(pure = true)
-    public StyledGlyph(int codepoint, Style style) {
+    public StyledGlyph(final int codepoint, final Style style) {
         this.codepoint = codepoint;
         this.style = style;
     }
@@ -70,7 +70,7 @@ public class StyledGlyph {
      * @param codepoint the codepoint
      */
     @Contract(pure = true)
-    public StyledGlyph(int codepoint) {
+    public StyledGlyph(final int codepoint) {
         this(codepoint, Style.empty());
     }
 
@@ -80,7 +80,7 @@ public class StyledGlyph {
      * @return the built component
      */
     public TextComponent toComponent() {
-        return Component.text(Character.toString(codepoint), style);
+        return Component.text(Character.toString(this.codepoint), this.style);
     }
 
     /**
@@ -89,9 +89,8 @@ public class StyledGlyph {
      * @return the codepoint
      */
     public int codepoint() {
-        return codepoint;
+        return this.codepoint;
     }
-
 
     /**
      * Gets the style.
@@ -99,6 +98,6 @@ public class StyledGlyph {
      * @return the style
      */
     public Style style() {
-        return style;
+        return this.style;
     }
 }

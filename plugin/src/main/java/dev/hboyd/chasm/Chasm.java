@@ -31,19 +31,32 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jspecify.annotations.NullMarked;
 import org.slf4j.Logger;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
-import java.nio.file.*;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystemNotFoundException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.UnaryOperator;
 
-@NullMarked
+/**
+ * Chasm is a Minecraft Paper plugin, which is a companion to the Chasm plugin. It provides the default Minecraft font's
+ * to the chasm library.
+ */
 public final class Chasm extends JavaPlugin implements HoverEventSource<Component> {
     public static final String ID = "Chasm";
     public static final ComponentLogger LOGGER = ComponentLogger.logger(ID);
@@ -53,67 +66,67 @@ public final class Chasm extends JavaPlugin implements HoverEventSource<Componen
 
     @Override
     public void onEnable() {
-        LOGGER.info("Chasm {} - Copyright (C) 2026 Harrison Boyd - Licensed under GPLv3", this.getPluginMeta().getVersion());
+        LOGGER.info("Chasm {} - Copyright (C) 2026 Harrison Boyd - Licensed under LGPLv3", this.getPluginMeta().getVersion());
         LOGGER.info("Building default Minecraft fonts");
 
         try {
             Files.createDirectories(this.getDataPath());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException("Failed to create data directory", e);
         }
 
-        Path resourcePackPath;
+        final Path resourcePackPath;
         try {
-            resourcePackPath = getOrDownloadClientJar(this.getDataPath());
-        } catch (IOException e) {
+            resourcePackPath = this.getOrDownloadClientJar(this.getDataPath());
+        } catch (final IOException e) {
             throw new RuntimeException("Failed to download client", e);
         }
 
         try {
-            loadAllFonts(resourcePackPath);
-        } catch (IOException e) {
+            this.loadAllFonts(resourcePackPath);
+        } catch (final IOException e) {
             throw new RuntimeException("Failed to load default Minecraft fonts", e);
         }
     }
 
-    private Path getOrDownloadClientJar(Path downloadDir) throws IOException {
-        Path clientPath = downloadDir.resolve("minecraft-client-" + ServerBuildInfo.buildInfo().minecraftVersionId() + ".jar");
+    private Path getOrDownloadClientJar(final Path downloadDir) throws IOException {
+        final Path clientPath = downloadDir.resolve("minecraft-client-" + ServerBuildInfo.buildInfo().minecraftVersionId() + ".jar");
         if (Files.exists(clientPath)) {
             LOGGER.info("Using cached client jar for {}", ServerBuildInfo.buildInfo().minecraftVersionId());
             return clientPath;
         }
 
-        Instant startInstant = Instant.now();
+        final Instant startInstant = Instant.now();
         // Get url to this version's manifest
         URL versionManifest = null;
-        try (InputStream is = URI.create("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json").toURL().openStream();
-             InputStreamReader isr = new InputStreamReader(is);
-             BufferedReader br = new BufferedReader(isr)) {
-            JsonArray versionArray = new Gson().fromJson(br, JsonObject.class).getAsJsonArray("versions");
-            for (JsonElement versionElement : versionArray) {
-                JsonObject version = versionElement.getAsJsonObject();
+        try (final InputStream is = URI.create("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json").toURL().openStream();
+                final InputStreamReader isr = new InputStreamReader(is);
+                final BufferedReader br = new BufferedReader(isr)) {
+            final JsonArray versionArray = new Gson().fromJson(br, JsonObject.class).getAsJsonArray("versions");
+            for (final JsonElement versionElement : versionArray) {
+                final JsonObject version = versionElement.getAsJsonObject();
                 if (Objects.equals(version.get("id").getAsString(), ServerBuildInfo.buildInfo().minecraftVersionId()))
                     versionManifest = URI.create(version.get("url").getAsString()).toURL();
             }
-        } catch (IOException e) {
-            throw new IOException("Failed to get version manifest" ,e);
+        } catch (final IOException e) {
+            throw new IOException("Failed to get version manifest", e);
         }
 
-        if (versionManifest == null) throw  new IllegalStateException();
+        if (versionManifest == null) throw new IllegalStateException();
 
-        URL clientURL;
-        try (InputStream is = versionManifest.openStream();
-             InputStreamReader isr = new InputStreamReader(is);
-             BufferedReader br = new BufferedReader(isr)) {
+        final URL clientURL;
+        try (final InputStream is = versionManifest.openStream();
+                final InputStreamReader isr = new InputStreamReader(is);
+                final BufferedReader br = new BufferedReader(isr)) {
             clientURL = URI.create(new Gson().fromJson(br, JsonObject.class).getAsJsonObject("downloads").getAsJsonObject("client").get("url").getAsString()).toURL();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new IOException("Failed to get client download URL", e);
         }
 
-        try (InputStream is = clientURL.openStream();
-             OutputStream os = Files.newOutputStream(clientPath)) {
+        try (final InputStream is = clientURL.openStream();
+                final OutputStream os = Files.newOutputStream(clientPath)) {
             is.transferTo(os);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new IOException("Failed to download client", e);
         }
 
@@ -123,23 +136,23 @@ public final class Chasm extends JavaPlugin implements HoverEventSource<Componen
     }
 
     @SuppressWarnings("PatternValidation")
-    private void loadAllFonts(Path resourcePackZIPPath) throws IOException {
-        Instant startInstant = Instant.now();
-        URI resourcePackURI;
+    private void loadAllFonts(final Path resourcePackZIPPath) throws IOException {
+        final Instant startInstant = Instant.now();
+        final URI resourcePackURI;
         resourcePackURI = URI.create("jar:" + resourcePackZIPPath.toUri() + "!/");
 
         try {
-            FileSystems.getFileSystem(resourcePackURI).close(); // We should be the only one opening this file, this is a fail-safe
-        } catch (FileSystemNotFoundException _) {}
+            FileSystems.getFileSystem(resourcePackURI).close(); // We should be the only one opening this file; this is a fail-safe
+        } catch (final FileSystemNotFoundException _) {}
 
-        try (FileSystem resourcePackFS = FileSystems.newFileSystem(resourcePackURI, Map.of())) {
-            Path assetsDir = resourcePackFS.getPath("assets");
-            PathMatcher matcher = resourcePackFS.getPathMatcher("glob:assets/*/font/*.json");
-            List<Path> fontPaths = Files.walk(assetsDir)
+        try (final FileSystem resourcePackFS = FileSystems.newFileSystem(resourcePackURI, Map.of())) {
+            final Path assetsDir = resourcePackFS.getPath("assets");
+            final PathMatcher matcher = resourcePackFS.getPathMatcher("glob:assets/*/font/*.json");
+            final List<Path> fontPaths = Files.walk(assetsDir)
                     .filter(matcher::matches)
                     .toList();
 
-            for (Path fontPath : fontPaths) {
+            for (final Path fontPath : fontPaths) {
                 String keyFontPath = resourcePackFS.getPath("assets", "minecraft", "font")
                         .relativize(fontPath)
                         .toAbsolutePath()
@@ -170,7 +183,7 @@ public final class Chasm extends JavaPlugin implements HoverEventSource<Componen
     }
 
     @Override
-    public HoverEvent<Component> asHoverEvent(UnaryOperator<Component> op) {
+    public HoverEvent<Component> asHoverEvent(final UnaryOperator<Component> op) {
         return HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, op.apply(Component.text("v" + this.getPluginMeta().getVersion())));
     }
 }

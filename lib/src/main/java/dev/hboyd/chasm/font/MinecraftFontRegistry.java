@@ -29,11 +29,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A registry of {@link MinecraftFont}
+ * A registry of {@link MinecraftFont}.
  */
 public class MinecraftFontRegistry {
     /**
-     * Global static registry, includes simplified version of the <code>minecraft:default</code> font.
+     * Global static registry, includes a simplified version of the <code>minecraft:default</code> font.
      *
      * @see BuiltinGlyphDefinitionProvider
      */
@@ -45,6 +45,9 @@ public class MinecraftFontRegistry {
 
     private final Map<Key, MinecraftFont> fontMap;
 
+    /**
+     * Creates a new empty Minecraft font registry.
+     */
     @Contract(pure = true)
     public MinecraftFontRegistry() {
         this.fontMap = new HashMap<>();
@@ -56,8 +59,8 @@ public class MinecraftFontRegistry {
      *
      * @param font the font to add
      */
-    public void addFont(MinecraftFont font) {
-        fontMap.put(font.key(), font);
+    public void addFont(final MinecraftFont font) {
+        this.fontMap.put(font.key(), font);
     }
 
     /**
@@ -66,8 +69,8 @@ public class MinecraftFontRegistry {
      * @param key the key of the font to get
      * @return the font or null
      */
-    public @Nullable MinecraftFont getFont(Key key) {
-        return fontMap.get(key);
+    public @Nullable MinecraftFont getFont(final Key key) {
+        return this.fontMap.get(key);
     }
 
     /**
@@ -77,8 +80,8 @@ public class MinecraftFontRegistry {
      * @param key the key of the font to remove
      * @return the removed font or null
      */
-    public @Nullable MinecraftFont removeFont(Key key) {
-        return fontMap.remove(key);
+    public @Nullable MinecraftFont removeFont(final Key key) {
+        return this.fontMap.remove(key);
     }
 
     /**
@@ -87,8 +90,8 @@ public class MinecraftFontRegistry {
      * @param key the key to check for
      * @return if the registry contains the font
      */
-    public boolean hasFont(Key key) {
-        return fontMap.containsKey(key);
+    public boolean hasFont(final Key key) {
+        return this.fontMap.containsKey(key);
     }
 
     /**
@@ -97,6 +100,6 @@ public class MinecraftFontRegistry {
      * @return registered fonts
      */
     public @Unmodifiable List<MinecraftFont> fonts() {
-        return List.copyOf(fontMap.values());
+        return List.copyOf(this.fontMap.values());
     }
 }

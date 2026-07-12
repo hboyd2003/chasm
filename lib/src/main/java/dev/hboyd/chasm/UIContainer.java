@@ -18,6 +18,9 @@
 
 package dev.hboyd.chasm;
 
+/**
+ * Different kinds of text containers.
+ */
 public enum UIContainer {
     CHAT(319f),
     INVENTORY(161f),
@@ -27,11 +30,16 @@ public enum UIContainer {
 
     private final float width;
 
-    UIContainer(float width) {
+    UIContainer(final float width) {
         this.width = width;
     }
 
+    /**
+     * The total width of the text container.
+     *
+     * @return the width
+     */
     public float width() {
-        return width;
+        return this.width;
     }
 }

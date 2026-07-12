@@ -29,7 +29,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TreeMap;
 
 /**
  * Represents the Minecraft bitmap font provider.
@@ -41,24 +43,32 @@ public class BitmapGlyphDefinitionProvider implements GlyphDefinitionProvider {
 
     private final TreeRangeMap<Integer, Float> charWidthRangeMap;
 
+    /**
+     * Creates a new code provider based on a given bitmap and the codepoints contained.
+     *
+     * @param codepointTable codepoints to map each glyph to
+     * @param bitmapPath     path to the bitmap which contains all glyphs
+     * @param height         height of each glyph
+     * @throws IOException if unable to read the given bitmap file.
+     */
     public BitmapGlyphDefinitionProvider(final int[][] codepointTable,
                                          final Path bitmapPath,
                                          final int height) throws IOException {
         final TreeMap<Integer, Float> charWidthMap = new TreeMap<>();
 
-        try (InputStream charImageInputStream = Files.newInputStream(bitmapPath)) {
-            BufferedImage charImage = ImageIO.read(charImageInputStream);
+        try (final InputStream charImageInputStream = Files.newInputStream(bitmapPath)) {
+            final BufferedImage charImage = ImageIO.read(charImageInputStream);
 
             final int cellHeight = Math.floorDiv(charImage.getHeight(), codepointTable.length);
             final int cellWidth = Math.floorDiv(charImage.getWidth(), codepointTable[0].length);
             final float scale = (float) height / cellHeight;
 
             int cursorY = 0;
-            for (int[] codePoints : codepointTable) {
+            for (final int[] codePoints : codepointTable) {
                 int cursorX = 0;
-                for (int codepoint : codePoints) {
+                for (final int codepoint : codePoints) {
                     if (codepoint != 0) {
-                        BufferedImage cell = charImage.getSubimage(cursorX, cursorY, cellWidth, cellHeight);
+                        final BufferedImage cell = charImage.getSubimage(cursorX, cursorY, cellWidth, cellHeight);
                         charWidthMap.put(codepoint, (findRightImageBound(cell) + 2) * scale); // Add one to account for rendered shadow (shadow takes up space)
                     }
                     cursorX += cellWidth;
@@ -67,16 +77,23 @@ public class BitmapGlyphDefinitionProvider implements GlyphDefinitionProvider {
             }
         }
 
-        charWidthRangeMap = ProviderUtil.coalesceCharMap(charWidthMap);
+        this.charWidthRangeMap = ProviderUtil.coalesceCharMap(charWidthMap);
     }
 
+    /**
+     * Creates a new code provider based on a given bitmap and the codepoints contained.
+     *
+     * @param codepointTable codepoints to map each glyph to
+     * @param bitmapPath     path to the bitmap which contains all glyphs
+     * @throws IOException if unable to read the given bitmap file
+     */
     public BitmapGlyphDefinitionProvider(final int[][] codepointTable, final Path bitmapPath) throws IOException {
         this(codepointTable, bitmapPath, DEFAULT_HEIGHT);
     }
 
     @Override
-    public Optional<Float> tryGetWidthOf(int codepoint, Style style) {
-        return Optional.ofNullable(charWidthRangeMap.get(codepoint))
+    public Optional<Float> tryGetWidthOf(final int codepoint, final Style style) {
+        return Optional.ofNullable(this.charWidthRangeMap.get(codepoint))
                 .map(width -> width + (style.hasDecoration(TextDecoration.BOLD) ? 1 : 0));
     }
 
@@ -85,7 +102,7 @@ public class BitmapGlyphDefinitionProvider implements GlyphDefinitionProvider {
         return Map.of(); // Bitmaps cannot have spaces
     }
 
-    private static int findRightImageBound(BufferedImage image) {
+    private static int findRightImageBound(final BufferedImage image) {
         for (int cursorX = image.getWidth() - 1; cursorX >= 0; cursorX--) {
             for (int cursorY = image.getHeight() - 1; cursorY >= 0; cursorY--) {
                 if (image.getColorModel().getAlpha(image.getRaster().getDataElements(cursorX, cursorY, null)) != 0)

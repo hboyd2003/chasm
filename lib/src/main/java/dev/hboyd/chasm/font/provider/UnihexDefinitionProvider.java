@@ -29,8 +29,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
-
+import java.util.Map;
+import java.util.Optional;
+import java.util.TreeMap;
 
 /**
  * Represents the Minecraft unihex font provider.
@@ -40,21 +41,26 @@ import java.util.*;
 public class UnihexDefinitionProvider implements GlyphDefinitionProvider {
     private final TreeRangeMap<Integer, Integer> charWidthRangeMap;
 
-    public UnihexDefinitionProvider(Path rawHexFilePath) throws IOException {
+    /**
+     * Creates a new glyph provider using a file in the <a href="https://en.wikipedia.org/wiki/GNU_Unifont#.hex_format">GNU Unifont</a> format.
+     *
+     * @param rawHexFilePath path to the GNU Unifont hex file
+     * @throws IOException if the raw hex file cannot be read
+     */
+    public UnihexDefinitionProvider(final Path rawHexFilePath) throws IOException {
         final TreeMap<Integer, Integer> charWidthMap = new TreeMap<>();
 
         if (Files.notExists(rawHexFilePath))
             throw new IllegalArgumentException("raw hex file does not exist");
 
-
-        try (InputStream hexInputStream = Files.newInputStream(rawHexFilePath) ;
-             InputStreamReader hexInputStreamReader = new InputStreamReader(hexInputStream);
-             BufferedReader hexBufferedReader = new BufferedReader(hexInputStreamReader)) {
+        try (final InputStream hexInputStream = Files.newInputStream(rawHexFilePath);
+                final InputStreamReader hexInputStreamReader = new InputStreamReader(hexInputStream);
+                final BufferedReader hexBufferedReader = new BufferedReader(hexInputStreamReader)) {
 
             String line;
             while ((line = hexBufferedReader.readLine()) != null) {
-                String[] strings = line.split(":");
-                int codepoint = Integer.parseInt(strings[0], 16);
+                final String[] strings = line.split(":");
+                final int codepoint = Integer.parseInt(strings[0], 16);
 
                 final int bytesPerRow = strings[1].length() >= 64 ? 4 : 2;
                 final int pixelsPerRow = bytesPerRow * 4;
@@ -78,7 +84,6 @@ public class UnihexDefinitionProvider implements GlyphDefinitionProvider {
                         }
                     }
 
-
                     for (int rightBit = pixelsPerRow - 1; rightBit > minLeftBit; rightBit--) {
                         if (((rowValue >> (rightBit - 1)) & 1) == 1) {
                             if (rightBit > maxRightBit) maxRightBit = rightBit;
@@ -95,8 +100,8 @@ public class UnihexDefinitionProvider implements GlyphDefinitionProvider {
     }
 
     @Override
-    public Optional<Float> tryGetWidthOf(int codepoint, Style style) {
-        return Optional.ofNullable(charWidthRangeMap.get(codepoint))
+    public Optional<Float> tryGetWidthOf(final int codepoint, final Style style) {
+        return Optional.ofNullable(this.charWidthRangeMap.get(codepoint))
                 .map(width -> width + (style.hasDecoration(TextDecoration.BOLD) ? 1 : 0))
                 .map(Integer::floatValue);
     }

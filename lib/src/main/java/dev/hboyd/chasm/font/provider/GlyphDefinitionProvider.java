@@ -27,17 +27,17 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
- * Provides definitions for Glyphs
+ * Provides definitions for Glyphs.
  */
 public interface GlyphDefinitionProvider {
 
     /**
      * Attempts to get the width of the codepoint with the given style when rendered in Minecraft.
-     * Returns empty if the provider does not have a definition for this codepoint
+     * Returns empty if the provider does not have a definition for this codepoint.
      * For characters with a shadow, the width will include it.
      *
      * @param codepoint the codepoint to get the width of
-     * @param style the style to adapt the width to
+     * @param style     the style to adapt the width to
      * @return the rendered width of the codepoint or empty
      */
     Optional<Float> tryGetWidthOf(int codepoint, Style style);
@@ -47,12 +47,13 @@ public interface GlyphDefinitionProvider {
      * For characters with a shadow, the width will include it.
      *
      * @param codepoint the codepoint to get the width of
-     * @param style the style to adapt the width to
+     * @param style     the style to adapt the width to
      * @return the rendered width of the codepoint or default
      * @throws NoSuchElementException when the provider does not have the codepoint
      */
     default float getWidthOf(final int codepoint, final Style style) throws NoSuchElementException {
-        return tryGetWidthOf(codepoint, style).orElseThrow(() -> new NoSuchElementException("No such codepoint " + codepoint));
+        return this.tryGetWidthOf(codepoint, style)
+                .orElseThrow(() -> new NoSuchElementException("No such codepoint " + codepoint));
     }
 
     /**
@@ -64,7 +65,7 @@ public interface GlyphDefinitionProvider {
      * @return the rendered width of the StyledGlyph or empty
      */
     default Optional<Float> tryGetWidthOf(final StyledGlyph styledGlyph) {
-        return tryGetWidthOf(styledGlyph.codepoint(), styledGlyph.style());
+        return this.tryGetWidthOf(styledGlyph.codepoint(), styledGlyph.style());
     }
 
     /**
@@ -76,15 +77,16 @@ public interface GlyphDefinitionProvider {
      * @throws NoSuchElementException when the provider does not have the glyph
      */
     default float getWidthOf(final StyledGlyph styledGlyph) {
-        return getWidthOf(styledGlyph.codepoint(), styledGlyph.style());
+        return this.getWidthOf(styledGlyph.codepoint(), styledGlyph.style());
     }
 
     /**
      * Gets a map of space codepoints and their widths.
      * Spaces must be defined by a space provider and are unique in that they can be any width.
-     * Additionally, spaces have not shadow allowing them to have a width of one or even zero.
+     * Additionally, spaces have no shadow allowing them to have a width of one, zero, or even negative.
      *
      * @return all spaces provided by this provider
      */
-    @Unmodifiable Map<Integer, Float> getSpaceCodepoints();
+    @Unmodifiable
+    Map<Integer, Float> getSpaceCodepoints();
 }

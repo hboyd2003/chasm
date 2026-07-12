@@ -25,13 +25,14 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Locale;
 
 /**
- * Utilities for spacing {@link Component}s
+ * Utilities for spacing {@link Component}s.
  */
 // TODO: Handle multi-line components and wrapping when Adventure 5.0 releases
-public class ComponentSpacer {
+public final class ComponentSpacer {
 
     private ComponentSpacer() {}
 
@@ -97,7 +98,7 @@ public class ComponentSpacer {
                 Character.toString(paddingGlyph.codepoint()).repeat((int) (paddingGlyphCount / 2)),
                 paddingGlyph.style());
 
-        TextComponent.Builder builder = Component.text()
+        final TextComponent.Builder builder = Component.text()
                 .append(paddingComponent)
                 .append(component)
                 .append(paddingComponent);
@@ -107,7 +108,6 @@ public class ComponentSpacer {
 
         return builder.build();
     }
-
 
     /**
      * Center aligns the component by padding it with the provided glyph.
@@ -183,11 +183,11 @@ public class ComponentSpacer {
                                     final float containerWidth,
                                     final Locale locale) {
         // TODO: Dynamically grab the smallest possible space and use it to more accurately justify the text
-        String minimessage = MiniMessage.miniMessage().serialize(component.compact());
+        final String minimessage = MiniMessage.miniMessage().serialize(component.compact());
 
         final int spacesNeeded = findNeededPaddingCount(component, new StyledGlyph(' '), widthProvider, containerWidth, locale);
         final int[] codepoints = minimessage.codePoints().toArray();
-        int whitespaceCount = (int) Arrays.stream(codepoints)
+        final int whitespaceCount = (int) Arrays.stream(codepoints)
                 .filter(Character::isWhitespace)
                 .count();
         if (whitespaceCount == 0) return component;
@@ -196,8 +196,8 @@ public class ComponentSpacer {
         int remainder = spacesNeeded % whitespaceCount;
 
         int depth = 0;
-        StringBuilder builder = new StringBuilder();
-        for (int codepoint : codepoints) {
+        final StringBuilder builder = new StringBuilder();
+        for (final int codepoint : codepoints) {
             if (depth == 0 && Character.isWhitespace(codepoint)) {
                 builder.append(spacesPerWhitespace);
                 if (remainder > 0) {
@@ -270,7 +270,6 @@ public class ComponentSpacer {
                                   final TextWidthProvider widthProvider) {
         return split(leftComponent, rightComponent, widthProvider, UIContainer.CHAT.width(), Locale.getDefault());
     }
-
 
     // TODO: Implement a flex-box like column container.
 

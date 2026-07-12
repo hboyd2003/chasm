@@ -24,17 +24,17 @@ import com.google.common.collect.TreeRangeMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-class ProviderUtil {
+final class ProviderUtil {
     private ProviderUtil() {}
 
-    static <T extends Number> TreeRangeMap<Integer, T> coalesceCharMap(TreeMap<Integer, T> charMap) {
+    static <T extends Number> TreeRangeMap<Integer, T> coalesceCharMap(final TreeMap<Integer, T> charMap) {
         final TreeRangeMap<Integer, T> charRangeMap = TreeRangeMap.create();
 
         T currentWidth = charMap.firstEntry().getValue();
         int firstKey = charMap.firstKey();
         int previousKey = firstKey;
 
-        for (Map.Entry<Integer, T> widthEntry : charMap.entrySet()) {
+        for (final Map.Entry<Integer, T> widthEntry : charMap.entrySet()) {
             if (!widthEntry.getValue().equals(currentWidth) || previousKey + 1 != widthEntry.getKey()) {
                 charRangeMap.put(Range.closed(firstKey, previousKey), currentWidth);
                 currentWidth = widthEntry.getValue();

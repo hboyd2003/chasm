@@ -33,7 +33,12 @@ import net.kyori.adventure.util.Buildable;
 import org.checkerframework.common.returnsreceiver.qual.This;
 import org.jetbrains.annotations.Contract;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.Stack;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -51,7 +56,7 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
     private final Key defaultFont;
 
     @Contract(pure = true)
-    private TextWidthProvider(MinecraftFontRegistry fontRegistry, Key defaultFont) {
+    protected TextWidthProvider(final MinecraftFontRegistry fontRegistry, final Key defaultFont) {
         this.fontRegistry = fontRegistry;
         this.defaultFont = defaultFont;
     }
@@ -63,20 +68,19 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
 
     /**
      * Gets the width of the component when rendered in Minecraft.
-     * <p>
-     * The provider's default font is used when the style does not include one.
+     *
+     * <p>The provider's default font is used when the style does not include one.</p>
      * If the component has a codepoint in which the font has no definition for, the width of the hardcoded
      * <a href="https://minecraft.wiki/w/Missing_textures_and_models#Missing_font_character">.notdef</a>
-     * character is returned.
-     * For characters with a shadow, the width will include it.
+     * character is returned. For characters with a shadow, the width will include it.
      *
      * @param component the component to get the width of
      * @param locale   the locale to use
      * @return the width of the component
      * @throws IllegalArgumentException when an unknown font is used
      */
-    public float widthOf(Component component, Locale locale) {
-        AtomicReference<Float> length = new AtomicReference<>(0f);
+    public float widthOf(final Component component, final Locale locale) {
+        final AtomicReference<Float> length = new AtomicReference<>(0f);
         // TODO: Handle multi-line components
         buildFlattener(locale).flatten(component, new FlattenerListener() {
             final Stack<Style> styleStack = new Stack<>();
@@ -90,7 +94,7 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
 
             @Override
             public void component(final String text) {
-                length.accumulateAndGet(widthOf(text, this.currentStyle), Float::sum);
+                length.accumulateAndGet(TextWidthProvider.this.widthOf(text, this.currentStyle), Float::sum);
             }
 
             @Override
@@ -113,30 +117,36 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
 
     /**
      * Gets the width of the component when rendered in Minecraft.
-     * <p>
-     * The provider's default font is used when the style does not include one.
+     *
+     * <p>The provider's default font is used when the style does not include one.
      * If the component has a codepoint in which the font has no definition for, the width of the hardcoded
      * <a href="https://minecraft.wiki/w/Missing_textures_and_models#Missing_font_character">.notdef</a>
-     * character is returned.
-     * For characters with a shadow, the width will include it.
+     * character is returned. For characters with a shadow, the width will include it.</p>
      *
      * @param component the component to get the width of
      * @return the width of the component
      * @throws IllegalArgumentException when an unknown font is used
      */
-    public float widthOf(Component component) {
-        return widthOf(component, Locale.getDefault());
+    public float widthOf(final Component component) {
+        return this.widthOf(component, Locale.getDefault());
     }
 
-    public Map<Integer, Float> getCodepointWidthMap(String text, Style style) {
-        Key fontKey = Optional.ofNullable(style.font()).orElse(defaultFont);
-        MinecraftFont font = fontRegistry.getFont(fontKey);
+    /**
+     * Builds a map of the codepoints and their widths for each codepoint within the given text.
+     *
+     * @param text the string of codepoints to use
+     * @param style the style of the given text
+     * @return a map of the codepoints and their widths
+     */
+    public Map<Integer, Float> getCodepointWidthMap(final String text, final Style style) {
+        final Key fontKey = Optional.ofNullable(style.font()).orElse(this.defaultFont);
+        final MinecraftFont font = this.fontRegistry.getFont(fontKey);
         if (font == null)
             throw new IllegalArgumentException("Unknown font: " + fontKey);
 
-        Map<Integer, Float> codePointWidthMap = new HashMap<>();
+        final Map<Integer, Float> codePointWidthMap = new HashMap<>();
         for (int i = 0; i < text.length(); i++) {
-            int codepoint = text.codePointAt(i);
+            final int codepoint = text.codePointAt(i);
             if (!codePointWidthMap.containsKey(codepoint)) {
                 codePointWidthMap.put(codepoint, font.tryGetWidthOf(i, style).orElse(NODEF_WIDTH));
             }
@@ -145,24 +155,22 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
         return codePointWidthMap;
     }
 
-
     /**
      * Gets the width of the text with the given style when rendered in Minecraft.
-     * <p>
-     * The provider's default font is used when the style does not include one.
+     *
+     * <p>The provider's default font is used when the style does not include one.
      * If the text has a codepoint in which the font has no definition for, the width of the hardcoded
      * <a href="https://minecraft.wiki/w/Missing_textures_and_models#Missing_font_character">.notdef</a>
-     * character is returned.
-     * For characters with a shadow, the width will include it.
+     * character is returned. For characters with a shadow, the width will include it.</p>
      *
      * @param text  the text to get the width of
      * @param style the style to use
      * @return the width of the component
      * @throws IllegalArgumentException when an unknown font is used
      */
-    public float widthOf(String text, Style style) {
-        Key fontKey = Optional.ofNullable(style.font()).orElse(defaultFont);
-        MinecraftFont font = fontRegistry.getFont(fontKey);
+    public float widthOf(final String text, final Style style) {
+        final Key fontKey = Optional.ofNullable(style.font()).orElse(this.defaultFont);
+        final MinecraftFont font = this.fontRegistry.getFont(fontKey);
         if (font == null)
             throw new IllegalArgumentException("Unknown font: " + fontKey);
 
@@ -171,43 +179,40 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
 
     /**
      * Gets the width of the codepoint with the given style when rendered in Minecraft.
-     * <p>
-     * The provider's default font is used when the style does not include one.
+     *
+     * <p>The provider's default font is used when the style does not include one.
      * If the font does not have a definition for the codepoint the width of the hardcoded
      * <a href="https://minecraft.wiki/w/Missing_textures_and_models#Missing_font_character">.notdef</a>
-     * character is returned.
-     * For characters with a shadow, the width will include it.
+     * character is returned. For characters with a shadow, the width will include it.</p>
      *
      * @param codepoint the codepoint to get the width of
      * @param style     the style to adapt the width to
      * @return the rendered width of the codepoint or default
      * @throws IllegalArgumentException when an unknown font is specified
      */
-    public float widthOf(int codepoint, Style style) throws NoSuchElementException {
-        Key fontKey = Optional.ofNullable(style.font()).orElse(defaultFont);
-        MinecraftFont font = fontRegistry.getFont(fontKey);
+    public float widthOf(final int codepoint, final Style style) throws NoSuchElementException {
+        final Key fontKey = Optional.ofNullable(style.font()).orElse(this.defaultFont);
+        final MinecraftFont font = this.fontRegistry.getFont(fontKey);
         if (font == null)
             throw new IllegalArgumentException("Unknown font: " + fontKey);
-
 
         return font.tryGetWidthOf(codepoint, style).orElse(NODEF_WIDTH);
     }
 
     /**
      * Gets the width of the styled glyph when rendered in Minecraft.
-     * <p>
-     * The provider's default font is used when the style does not include one.
+     *
+     * <p>The provider's default font is used when the style does not include one.
      * If the font glyph does not have a definition for it the width of the hardcoded
      * <a href="https://minecraft.wiki/w/Missing_textures_and_models#Missing_font_character">.notdef</a>
-     * character is returned.
-     * For characters with a shadow, the width will include it.
+     * character is returned. For characters with a shadow, the width will include it.</p>
      *
      * @param styledGlyph the StyledGlyph to get the width of
      * @return the rendered width of the StyledGlyph
      * @throws IllegalArgumentException when an unknown font is specified
      */
-    public float widthOf(StyledGlyph styledGlyph) {
-        return widthOf(styledGlyph.codepoint(), styledGlyph.style());
+    public float widthOf(final StyledGlyph styledGlyph) {
+        return this.widthOf(styledGlyph.codepoint(), styledGlyph.style());
     }
 
     @Override
@@ -226,12 +231,12 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
     }
 
     @Contract("_ -> new")
-    private static ComponentFlattener buildFlattener(Locale locale) {
+    private static ComponentFlattener buildFlattener(final Locale locale) {
         return ComponentFlattener.basic().toBuilder()
                 .complexMapper(TranslatableComponent.class, (component, componentConsumer) -> {
-                    Component renderedComponent = GlobalTranslator.render(component, locale);
+                    final Component renderedComponent = GlobalTranslator.render(component, locale);
                     // We need to check if the translation failed to render
-                    if (renderedComponent instanceof TranslatableComponent translatableComponent) {
+                    if (renderedComponent instanceof final TranslatableComponent translatableComponent) {
                         String fallback = translatableComponent.fallback();
                         if (fallback == null) fallback = translatableComponent.key();
 
@@ -241,14 +246,17 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
                 .build();
     }
 
+    /**
+     * The builder for {@link TextWidthProvider}.
+     */
     public static class Builder implements Buildable.Builder<TextWidthProvider>, AbstractBuilder<TextWidthProvider> {
         private MinecraftFontRegistry fontRegistry;
         private Key defaultFont;
 
         @Contract(pure = true)
-        Builder(TextWidthProvider textWidthProvider) {
-            fontRegistry = textWidthProvider.fontRegistry;
-            defaultFont = textWidthProvider.defaultFont;
+        protected Builder(final TextWidthProvider textWidthProvider) {
+            this.fontRegistry = textWidthProvider.fontRegistry;
+            this.defaultFont = textWidthProvider.defaultFont;
         }
 
         /**
@@ -257,7 +265,7 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
          * @param fontRegistry the font registry
          * @return this
          */
-        public @This Builder fontRegistry(MinecraftFontRegistry fontRegistry) {
+        public @This Builder fontRegistry(final MinecraftFontRegistry fontRegistry) {
             this.fontRegistry = fontRegistry;
             return this;
         }
@@ -268,16 +276,21 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
          * @param defaultFont the font.
          * @return this
          */
-        public @This Builder defaultFont(Key defaultFont) {
+        public @This Builder defaultFont(final Key defaultFont) {
             this.defaultFont = defaultFont;
             return this;
         }
 
+        /**
+         * Builds the configured text width provider.
+         *
+         * @return a new text width provider
+         */
         @Contract(" -> new")
         public TextWidthProvider build() {
-            if (!fontRegistry.hasFont(defaultFont))
+            if (!this.fontRegistry.hasFont(this.defaultFont))
                 throw new IllegalStateException("No font width source for default font key");
-            return new TextWidthProvider(fontRegistry, defaultFont);
+            return new TextWidthProvider(this.fontRegistry, this.defaultFont);
         }
     }
 }

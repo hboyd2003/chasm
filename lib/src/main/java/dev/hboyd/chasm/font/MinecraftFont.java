@@ -50,26 +50,26 @@ public class MinecraftFont implements Keyed, GlyphDefinitionProvider {
     private final List<GlyphDefinitionProvider> references;
 
     /**
-     * Constructs a new MinecraftFont using the provided font key and references
+     * Constructs a new MinecraftFont using the provided font key and references.
      *
      * @param fontKey the key for the font
      * @param references the list of glyph providers that make up the font
      */
     @Contract(pure = true)
-    public MinecraftFont(Key fontKey, List<GlyphDefinitionProvider> references) {
+    public MinecraftFont(final Key fontKey, final List<GlyphDefinitionProvider> references) {
         this.fontKey = fontKey;
         this.references = List.copyOf(references);
     }
 
     @Override
     public Key key() {
-        return fontKey;
+        return this.fontKey;
     }
 
     @Override
-    public Optional<Float> tryGetWidthOf(int codepoint, Style style) {
+    public Optional<Float> tryGetWidthOf(final int codepoint, final Style style) {
         Optional<Float> width = Optional.empty();
-        for (GlyphDefinitionProvider reference : references) {
+        for (final GlyphDefinitionProvider reference : this.references) {
             width = reference.tryGetWidthOf(codepoint, style);
             if (width.isPresent()) break;
         }
@@ -79,12 +79,17 @@ public class MinecraftFont implements Keyed, GlyphDefinitionProvider {
 
     @Override
     public @Unmodifiable Map<Integer, Float> getSpaceCodepoints() {
-        return references.reversed().stream()
+        return this.references.reversed().stream()
                 .flatMap(reference -> reference.getSpaceCodepoints().entrySet().stream())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
+    /**
+     * All {@link GlyphDefinitionProvider}s that make up this font.
+     *
+     * @return the list of providers
+     */
     public @Unmodifiable List<GlyphDefinitionProvider> references() {
-        return references;
+        return this.references;
     }
 }

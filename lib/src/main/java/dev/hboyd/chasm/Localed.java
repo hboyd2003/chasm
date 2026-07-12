@@ -21,7 +21,7 @@ package dev.hboyd.chasm;
 import java.util.Locale;
 
 /**
- * Something that has a {@link Locale}
+ * Something that has a {@link Locale}.
  */
 public interface Localed {
 

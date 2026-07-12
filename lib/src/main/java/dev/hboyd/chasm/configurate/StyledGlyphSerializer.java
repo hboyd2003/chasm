@@ -30,10 +30,10 @@ import java.util.Optional;
 
 /**
  * A configurate serializer for {@link StyledGlyph}s. Only the first codepoint is used.
- * <p>
- * Requires a {@link net.kyori.adventure.text.format.Style} serializer.
+ *
+ * <p>Requires a {@link net.kyori.adventure.text.format.Style} serializer</p>
  */
-public class StyledGlyphSerializer implements TypeSerializer<StyledGlyph> {
+public final class StyledGlyphSerializer implements TypeSerializer<StyledGlyph> {
     public static final StyledGlyphSerializer INSTANCE = new StyledGlyphSerializer();
 
     private static final String CHARACTER_NODE_PATH = "character";
@@ -42,7 +42,7 @@ public class StyledGlyphSerializer implements TypeSerializer<StyledGlyph> {
     private StyledGlyphSerializer() {}
 
     @Override
-    public @Nullable StyledGlyph deserialize(Type type, ConfigurationNode node) throws SerializationException {
+    public StyledGlyph deserialize(final Type type, final ConfigurationNode node) throws SerializationException {
         if (!node.hasChild(CHARACTER_NODE_PATH))
             throw new SerializationException("StyledGlyph is missing required character node!");
 
@@ -59,7 +59,7 @@ public class StyledGlyphSerializer implements TypeSerializer<StyledGlyph> {
     }
 
     @Override
-    public void serialize(Type type, @Nullable StyledGlyph styledGlyph, ConfigurationNode node) throws SerializationException {
+    public void serialize(final Type type, @Nullable final StyledGlyph styledGlyph, final ConfigurationNode node) throws SerializationException {
         if (styledGlyph == null) return;
 
         node.node(CHARACTER_NODE_PATH).set(String.class, Character.toString(styledGlyph.codepoint()));

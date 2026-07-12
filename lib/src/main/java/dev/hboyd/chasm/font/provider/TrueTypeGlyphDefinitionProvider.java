@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-
 /**
  * Represents the Minecraft ttf font provider.
  *
@@ -43,29 +42,39 @@ public class TrueTypeGlyphDefinitionProvider implements GlyphDefinitionProvider 
     final Font font;
     private final List<Integer> exclusions;
 
-    public TrueTypeGlyphDefinitionProvider(Path ttfPath, float fontSize, String exclusions) throws IOException, FontFormatException {
+    /**
+     * Creates a new TrueType glyph provider based on the TrueType file provided.
+     *
+     * @param ttfPath the path to the TrueType file
+     * @param fontSize relative scale of the glyphs
+     * @param exclusions a string of characters to ignore when ingesting the TrueType file
+     * @throws IOException if unable to read the TrueType file
+     * @throws FontFormatException if the given TrueType file is not in the correct format
+     */
+    public TrueTypeGlyphDefinitionProvider(final Path ttfPath, final float fontSize, final String exclusions) throws IOException, FontFormatException {
         if (!Files.exists(ttfPath))
             throw new IllegalArgumentException("ttf files does not exist");
 
-        try (InputStream is = Files.newInputStream(ttfPath)) {
-            font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(fontSize);
+        try (final InputStream is = Files.newInputStream(ttfPath)) {
+            this.font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(fontSize);
             this.exclusions = exclusions.codePoints().boxed().toList();
         }
     }
 
     @Override
-    public Optional<Float> tryGetWidthOf(int codepoint, Style style) {
-        if (exclusions.contains(codepoint) || !font.canDisplay(codepoint))
+    public Optional<Float> tryGetWidthOf(final int codepoint, final Style style) {
+        if (this.exclusions.contains(codepoint) || !this.font.canDisplay(codepoint))
             return Optional.empty();
 
-        Font styledFont = font;
+        Font styledFont = this.font;
         if (style.hasDecoration(TextDecoration.BOLD)) {
-            styledFont = font.deriveFont(Font.BOLD);
+            styledFont = this.font.deriveFont(Font.BOLD);
         } else if (style.hasDecoration(TextDecoration.ITALIC)) {
-            styledFont = font.deriveFont(Font.ITALIC);
+            styledFont = this.font.deriveFont(Font.ITALIC);
         }
 
-        return Optional.of((float) styledFont.getStringBounds(String.valueOf((char) codepoint), new FontRenderContext(null, true, true)).getWidth());
+        return Optional.of((float) styledFont.getStringBounds(String.valueOf((char) codepoint),
+                new FontRenderContext(null, true, true)).getWidth());
     }
 
     @Override

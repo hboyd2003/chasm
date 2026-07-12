@@ -22,7 +22,8 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Represents the Minecraft space font provider.
@@ -32,18 +33,23 @@ import java.util.*;
 public class SpaceGlyphDefinitionProvider implements GlyphDefinitionProvider {
     private final Map<Integer, Float> charMap;
 
-    public SpaceGlyphDefinitionProvider(Map<Integer, Float> charMap) {
+    /**
+     * Creates a new space glyph definition provider using the given map.
+     *
+     * @param charMap a map of chars and their width
+     */
+    public SpaceGlyphDefinitionProvider(final Map<Integer, Float> charMap) {
         this.charMap = Map.copyOf(charMap);
     }
 
     @Override
-    public Optional<Float> tryGetWidthOf(int codepoint, Style style) {
-        return Optional.ofNullable(charMap.get(codepoint))
+    public Optional<Float> tryGetWidthOf(final int codepoint, final Style style) {
+        return Optional.ofNullable(this.charMap.get(codepoint))
                 .map(width -> width + (style.hasDecoration(TextDecoration.BOLD) ? 1 : 0));
     }
 
     @Override
     public @Unmodifiable Map<Integer, Float> getSpaceCodepoints() {
-        return charMap;
+        return this.charMap;
     }
 }
