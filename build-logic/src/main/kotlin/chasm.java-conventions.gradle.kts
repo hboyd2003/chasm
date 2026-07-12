@@ -35,6 +35,8 @@ indra {
         }
     }
 
+    lgpl3OrLaterLicense()
+
     signWithKeyFromPrefixedProperties("hboyd")
 
     checkstyle(libs.versions.checkstyle.get())
