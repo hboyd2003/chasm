@@ -2,7 +2,6 @@
 minecraft = "1.21.8"
 
 # Gradle Plugins
-gradleShadow = "9.5.1"
 runPaper = "2.3.1"
 paperLoaderGen = "1.0.0"
 indra = "4.1.0-SNAPSHOT"
@@ -22,7 +21,6 @@ examinationAPI = "1.3.0"
 junit = "6.0.3"
 
 [plugins]
-gradleShadow = { id = "com.gradleup.shadow", version.ref = "gradleShadow" }
 paperLoaderGen = { id = "dev.hboyd.paper-loader-gen", version.ref = "paperLoaderGen" }
 runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
 gitSimpleSemver = { id = "dev.hboyd.git-simple-semver", version.ref = "gitSimpleSemver" }

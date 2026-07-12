@@ -1,9 +1,6 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar.Companion.shadowJar
-
 plugins {
     id("chasm.java-conventions")
     alias(libs.plugins.runPaper)
-    alias(libs.plugins.gradleShadow)
     alias(libs.plugins.paperLoaderGen)
 }
 
@@ -31,13 +28,5 @@ tasks {
 
     generatePaperLoader {
         classPath = "dev.hboyd.chasm.ChasmLoader"
-    }
-
-    shadowJar {
-        archiveClassifier = ""
-    }
-
-    jar {
-        enabled = false // Only shadowed jar
     }
 }
