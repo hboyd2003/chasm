@@ -4,7 +4,7 @@ minecraft = "1.21.8"
 # Gradle Plugins
 runPaper = "3.1.0"
 paperLoaderGen = "1.0.0"
-indra = "4.1.0-SNAPSHOT"
+indra = "4.2.0-SNAPSHOT"
 checkstyle = "13.7.0"
 gitSimpleSemver = "2.3.0"
 
