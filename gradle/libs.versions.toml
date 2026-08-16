@@ -5,7 +5,7 @@ minecraft = "1.21.8"
 runPaper = "3.1.0"
 paperLoaderGen = "1.0.0"
 indra = "4.2.0-SNAPSHOT"
-checkstyle = "13.7.0"
+checkstyle = "13.10.0"
 gitSimpleSemver = "2.3.0"
 
 # Libraries
