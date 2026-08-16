@@ -6,7 +6,7 @@ runPaper = "3.1.0"
 paperLoaderGen = "1.0.0"
 indra = "4.2.0-SNAPSHOT"
 checkstyle = "13.10.0"
-gitSimpleSemver = "2.3.0"
+gitSimpleSemver = "2.4.0"
 
 # Libraries
 adventureAPI = "4.26.1"
