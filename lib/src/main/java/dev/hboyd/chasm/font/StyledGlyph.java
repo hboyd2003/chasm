@@ -19,6 +19,7 @@
 package dev.hboyd.chasm.font;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.Style;
 import org.jetbrains.annotations.Contract;
@@ -26,7 +27,7 @@ import org.jetbrains.annotations.Contract;
 /**
  * A single Glyph or codepoint with a style.
  */
-public class StyledGlyph {
+public class StyledGlyph implements ComponentLike {
     private final int codepoint;
     private final Style style;
 
@@ -78,8 +79,15 @@ public class StyledGlyph {
      * Builds a {@link TextComponent} with the codepoint and style.
      *
      * @return the built component
+     * @deprecated use {@link StyledGlyph#asComponent()} instead
      */
+    @Deprecated(since = "1.1.0", forRemoval = true)
     public TextComponent toComponent() {
+        return this.asComponent();
+    }
+
+    @Override
+    public TextComponent asComponent() {
         return Component.text(Character.toString(this.codepoint), this.style);
     }
 
