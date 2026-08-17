@@ -170,22 +170,24 @@ public final class ComponentSpacer {
     }
 
     /**
-     * Justifies the given component.
+     * Justifies the given component padding with the provided glyph.
      *
      * @param component      the component to justify
+     * @param paddingGlyph   the glyph to pad with
      * @param widthProvider  the width provider to use
      * @param containerWidth the container width
      * @param locale         the locale to translate with
      * @return the justified component
      */
     public static Component justify(final Component component,
+                                    final StyledGlyph paddingGlyph,
                                     final TextWidthProvider widthProvider,
                                     final float containerWidth,
                                     final Locale locale) {
         // TODO: Dynamically grab the smallest possible space and use it to more accurately justify the text
         final String minimessage = MiniMessage.miniMessage().serialize(component.compact());
 
-        final int spacesNeeded = findNeededPaddingCount(component, new StyledGlyph(' '), widthProvider, containerWidth, locale);
+        final int spacesNeeded = findNeededPaddingCount(component, paddingGlyph, widthProvider, containerWidth, locale);
         final int[] codepoints = minimessage.codePoints().toArray();
         final int whitespaceCount = (int) Arrays.stream(codepoints)
                 .filter(Character::isWhitespace)
@@ -213,6 +215,22 @@ public final class ComponentSpacer {
         }
 
         return MiniMessage.miniMessage().deserialize(builder.toString());
+    }
+
+    /**
+     * Justifies the given component.
+     *
+     * @param component      the component to justify
+     * @param widthProvider  the width provider to use
+     * @param containerWidth the container width
+     * @param locale         the locale to translate with
+     * @return the justified component
+     */
+    public static Component justify(final Component component,
+                                    final TextWidthProvider widthProvider,
+                                    final float containerWidth,
+                                    final Locale locale) {
+        return justify(component, new StyledGlyph(' ', Style.empty()),  widthProvider, containerWidth, locale)
     }
 
     /**
