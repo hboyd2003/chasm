@@ -47,6 +47,7 @@ gitSimpleSemver = { module = "dev.hboyd:git-simple-semver", version.ref = "gitSi
 
 # Testing
 junitJupiterApi = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
+junitJupiterParams = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
 junitJupiterEngine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
 junitPlatformLauncher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junit" }
 
@@ -61,6 +62,10 @@ adventureAPI = [
     "adventureSerializerANSI",
 ]
 # Testing
+junitJupiterCompile = [
+    "junitJupiterApi",
+    "junitJupiterParams"
+]
 junitJupiterRuntime = [
     "junitJupiterEngine",
     "junitPlatformLauncher"

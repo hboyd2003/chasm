@@ -9,6 +9,9 @@ plugins {
 
 dependencies {
     compileOnly(libs.jspecify)
+
+    testImplementation(libs.bundles.junitJupiterCompile)
+    testRuntimeOnly(libs.bundles.junitJupiterRuntime)
 }
 
 indra {
@@ -46,5 +49,11 @@ idea {
     module {
         isDownloadJavadoc = true
         isDownloadSources = true
+    }
+}
+
+tasks {
+    test {
+        useJUnitPlatform()
     }
 }
