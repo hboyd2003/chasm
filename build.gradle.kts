@@ -10,3 +10,9 @@ idea {
         isDownloadSources = true
     }
 }
+
+tasks {
+    jar {
+        enabled = false
+    }
+}
