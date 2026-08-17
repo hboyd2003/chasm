@@ -5,6 +5,7 @@ plugins {
     id("net.kyori.indra")
     id("net.kyori.indra.publishing")
     id("net.kyori.indra.checkstyle")
+    id("net.kyori.indra.licenser.spotless")
 }
 
 dependencies {
@@ -43,6 +44,19 @@ indra {
     signWithKeyFromPrefixedProperties("hboyd")
 
     checkstyle(libs.versions.checkstyle.get())
+}
+
+indraSpotlessLicenser {
+    licenseHeaderFile(rootProject.file(".spotless/license_header_template.txt"))
+    newLine(true)
+}
+
+spotless {
+    java {
+        targetExclude("build/generated/**/*.java")
+        removeUnusedImports()
+        formatAnnotations()
+    }
 }
 
 idea {

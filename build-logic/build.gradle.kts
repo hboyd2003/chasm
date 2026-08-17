@@ -6,7 +6,7 @@ plugins {
 
 dependencies {
     compileOnly(files(libs::class.java.protectionDomain.codeSource.location))
-    implementation(libs.indra)
+    implementation(libs.bundles.indra)
 }
 
 java {

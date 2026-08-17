@@ -23,6 +23,7 @@ minecraft = "26.1.2"
 paperLoaderGen = { id = "dev.hboyd.paper-loader-gen", version.ref = "paperLoaderGen" }
 runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
 gitSimpleSemver = { id = "dev.hboyd.git-simple-semver", version.ref = "gitSimpleSemver" }
+indraLicenserSpotless = { id = "net.kyori.indra.licenser.spotless", version.ref = "indra" }
 
 [libraries]
 paperAPI = { group = "io.papermc.paper", name = "paper-api", version.ref = "paperAPI" }
@@ -42,7 +43,10 @@ examinationAPI = { group = "net.kyori", name = "examination-api", version.ref = 
 
 # Build
 jspecify = { group = "org.jspecify", name = "jspecify", version.ref = "jspecify" }
+
+# Gradle Plugins
 indra = { module = "net.kyori:indra-common", version.ref = "indra" }
+indraLicenserSpotless = { module = "net.kyori:indra-licenser-spotless", version.ref = "indra" }
 gitSimpleSemver = { module = "dev.hboyd:git-simple-semver", version.ref = "gitSimpleSemver" }
 
 # Testing
@@ -61,6 +65,13 @@ adventureAPI = [
     "adventureSerializerPlain",
     "adventureSerializerANSI",
 ]
+
+# Gradle Plugins
+indra = [
+    "indra",
+    "indraLicenserSpotless"
+]
+
 # Testing
 junitJupiterCompile = [
     "junitJupiterApi",
