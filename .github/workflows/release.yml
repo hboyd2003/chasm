@@ -6,7 +6,6 @@ on:
       - master
 jobs:
   tag-snapshot:
-    if: "!startsWith(github.ref, 'refs/tags/v')"
     uses:  "hboyd2003/github-ci/.github/workflows/tag-snapshot.yml@master"
     permissions:
       contents: "write"
