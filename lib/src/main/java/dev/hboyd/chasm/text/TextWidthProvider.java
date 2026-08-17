@@ -248,6 +248,24 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
     }
 
     /**
+     * Get the font registry used to calculate text widths with.
+     *
+     * @return the registry
+     */
+    public MinecraftFontRegistry fontRegistry() {
+        return this.fontRegistry;
+    }
+
+    /**
+     * Get the default font key.
+     *
+     * @return the font key
+     */
+    public Key defaultFont() {
+        return this.defaultFont;
+    }
+
+    /**
      * The builder for {@link TextWidthProvider}.
      */
     public static class Builder implements Buildable.Builder<TextWidthProvider>, AbstractBuilder<TextWidthProvider> {
