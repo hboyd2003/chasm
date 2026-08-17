@@ -19,6 +19,7 @@
 package dev.hboyd.chasm.text;
 
 import dev.hboyd.chasm.UIContainer;
+import dev.hboyd.chasm.font.FontUtil;
 import dev.hboyd.chasm.font.StyledGlyph;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -61,6 +62,25 @@ public final class ComponentSpacer {
     }
 
     /**
+     * Left aligns the component by padding it with the smallest space in the given width provider.
+     *
+     * @param component      the component to center
+     * @param widthProvider  the width provider to use
+     * @param containerWidth the container width
+     * @param locale         the locale to translate with
+     * @return a copy of the component left aligned
+     */
+    public static Component alignLeft(final Component component,
+                                      final TextWidthProvider widthProvider,
+                                      final float containerWidth,
+                                      final Locale locale) {
+        final StyledGlyph paddingGlyph = FontUtil.findSmallestPositiveSpace(widthProvider.fontRegistry())
+                .orElseThrow(() -> new IllegalArgumentException("Provided width provider has no spaces"));
+
+        return alignLeft(component, paddingGlyph, widthProvider, containerWidth, locale);
+    }
+
+    /**
      * Left aligns the component by padding it with the provided glyph.
      *
      * @param component     the component to center
@@ -69,8 +89,8 @@ public final class ComponentSpacer {
      * @return a copy of the component left aligned
      */
     public static Component alignLeft(final Component component,
-                                       final StyledGlyph paddingGlyph,
-                                       final TextWidthProvider widthProvider) {
+                                      final StyledGlyph paddingGlyph,
+                                      final TextWidthProvider widthProvider) {
         return alignLeft(component,
                 paddingGlyph,
                 widthProvider,
@@ -93,7 +113,11 @@ public final class ComponentSpacer {
                                         final TextWidthProvider widthProvider,
                                         final float containerWidth,
                                         final Locale locale) {
-        final float paddingGlyphCount = findNeededPaddingCount(component, paddingGlyph, widthProvider, containerWidth, locale);
+        final float paddingGlyphCount = findNeededPaddingCount(component,
+                paddingGlyph,
+                widthProvider,
+                containerWidth,
+                locale);
         final Component paddingComponent = Component.text(
                 Character.toString(paddingGlyph.codepoint()).repeat((int) (paddingGlyphCount / 2)),
                 paddingGlyph.style());
@@ -104,7 +128,7 @@ public final class ComponentSpacer {
                 .append(paddingComponent);
 
         if (paddingGlyphCount % 2 >= 1)
-            builder.append(paddingGlyph.toComponent());
+            builder.append(paddingGlyph.asComponent());
 
         return builder.build();
     }
@@ -146,9 +170,28 @@ public final class ComponentSpacer {
 
         return Component.text()
                 .append(Component.text(Character.toString(paddingGlyph.codepoint())
-                                .repeat(paddingCount), paddingGlyph.style()))
+                        .repeat(paddingCount), paddingGlyph.style()))
                 .append(component)
                 .build();
+    }
+
+    /**
+     * Right aligns the component by padding it with the smallest space in the given width provider.
+     *
+     * @param component     the component to center
+     * @param widthProvider the width provider to use
+     * @param containerWidth the container width
+     * @param locale         the locale to translate with
+     * @return a copy of the component right aligned
+     */
+    public static Component alignRight(final Component component,
+                                       final TextWidthProvider widthProvider,
+                                       final float containerWidth,
+                                       final Locale locale) {
+        final StyledGlyph paddingGlyph = FontUtil.findSmallestPositiveSpace(widthProvider.fontRegistry())
+                .orElseThrow(() -> new IllegalArgumentException("Provided width provider has no spaces"));
+
+        return alignRight(component, paddingGlyph, widthProvider, containerWidth, locale);
     }
 
     /**
@@ -184,7 +227,6 @@ public final class ComponentSpacer {
                                     final TextWidthProvider widthProvider,
                                     final float containerWidth,
                                     final Locale locale) {
-        // TODO: Dynamically grab the smallest possible space and use it to more accurately justify the text
         final String minimessage = MiniMessage.miniMessage().serialize(component.compact());
 
         final int spacesNeeded = findNeededPaddingCount(component, paddingGlyph, widthProvider, containerWidth, locale);
@@ -218,7 +260,7 @@ public final class ComponentSpacer {
     }
 
     /**
-     * Justifies the given component.
+     * Justifies the given component padding it with the smallest space in the given width provider.
      *
      * @param component      the component to justify
      * @param widthProvider  the width provider to use
@@ -230,7 +272,10 @@ public final class ComponentSpacer {
                                     final TextWidthProvider widthProvider,
                                     final float containerWidth,
                                     final Locale locale) {
-        return justify(component, new StyledGlyph(' ', Style.empty()),  widthProvider, containerWidth, locale)
+        final StyledGlyph paddingGlyph = FontUtil.findSmallestPositiveSpace(widthProvider.fontRegistry())
+                .orElseThrow(() -> new IllegalArgumentException("Provided width provider has no spaces"));
+
+        return justify(component, paddingGlyph, widthProvider, containerWidth, locale);
     }
 
     /**
