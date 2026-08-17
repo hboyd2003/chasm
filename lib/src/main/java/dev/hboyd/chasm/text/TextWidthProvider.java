@@ -34,6 +34,7 @@ import org.checkerframework.common.returnsreceiver.qual.This;
 import org.jetbrains.annotations.Contract;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -234,7 +235,7 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
     private static ComponentFlattener buildFlattener(final Locale locale) {
         return ComponentFlattener.basic().toBuilder()
                 .complexMapper(TranslatableComponent.class, (component, componentConsumer) -> {
-                    final Component renderedComponent = GlobalTranslator.render(component, locale);
+                    final Component renderedComponent = GlobalTranslator.render(component.children(List.of()), locale);
                     // We need to check if the translation failed to render
                     if (renderedComponent instanceof final TranslatableComponent translatableComponent) {
                         String fallback = translatableComponent.fallback();
