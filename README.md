@@ -1,5 +1,7 @@
 # Chasm
 
+[![Hboyd's Repo Version Badge](https://repo.hboyd.dev/api/badge/latest/releases/dev/hboyd/chasm-lib?&name=Hboyds%20Release%20Repo&prefix=v)](https://repo.hboyd.dev/#/releases/dev/hboyd/chasm-lib) [![Hboyd's Repo Version Badge](https://repo.hboyd.dev/api/badge/latest/snapshots/dev/hboyd/chasm-lib?&name=Hboyds%20Snapshot%20Repo&prefix=v)](https://repo.hboyd.dev/#/releases/dev/hboyd/chasm-lib)
+
 A library for calculating the width of and spacing text/components in Minecraft: Java Edition.
 
 Chasm provides the ability to calculate the display width of any text using any font. By default, it provides a
