@@ -216,19 +216,27 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
         return this.widthOf(styledGlyph.codepoint(), styledGlyph.style());
     }
 
-    @Override
-    public Builder toBuilder() {
-        return new Builder(this);
+    /**
+     * Get the font registry used to calculate text widths with.
+     *
+     * @return the registry
+     */
+    public MinecraftFontRegistry fontRegistry() {
+        return this.fontRegistry;
     }
 
     /**
-     * Creates a new component width provider builder with default values.
+     * Get the default font key.
      *
-     * @return the new builder
+     * @return the font key
      */
-    @Contract(" -> new")
-    public static Builder builder() {
-        return new TextWidthProvider().toBuilder();
+    public Key defaultFont() {
+        return this.defaultFont;
+    }
+
+    @Override
+    public Builder toBuilder() {
+        return new Builder(this);
     }
 
     @Contract("_ -> new")
@@ -248,21 +256,13 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
     }
 
     /**
-     * Get the font registry used to calculate text widths with.
+     * Creates a new component width provider builder with default values.
      *
-     * @return the registry
+     * @return the new builder
      */
-    public MinecraftFontRegistry fontRegistry() {
-        return this.fontRegistry;
-    }
-
-    /**
-     * Get the default font key.
-     *
-     * @return the font key
-     */
-    public Key defaultFont() {
-        return this.defaultFont;
+    @Contract(" -> new")
+    public static Builder builder() {
+        return new TextWidthProvider().toBuilder();
     }
 
     /**
