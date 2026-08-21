@@ -40,6 +40,8 @@ public final class ComponentSpacer {
     /**
      * Left aligns the component by padding it with the provided glyph.
      *
+     * <p>If the given component exceeds the containers length it will be returned.</p>
+     *
      * @param component      the component to center
      * @param paddingGlyph   the glyph to pad with
      * @param widthProvider  the width provider to use
@@ -64,6 +66,8 @@ public final class ComponentSpacer {
     /**
      * Left aligns the component by padding it with the smallest space in the given width provider.
      *
+     * <p>If the given component exceeds the containers length it will be returned.</p>
+     *
      * @param component      the component to center
      * @param widthProvider  the width provider to use
      * @param containerWidth the container width
@@ -83,6 +87,8 @@ public final class ComponentSpacer {
     /**
      * Left aligns the component by padding it with the provided glyph.
      *
+     * <p>If the given component exceeds the containers length it will be returned.</p>
+     *
      * @param component     the component to center
      * @param paddingGlyph  the glyph to pad with
      * @param widthProvider the width provider to use
@@ -100,6 +106,8 @@ public final class ComponentSpacer {
 
     /**
      * Center aligns the component by padding it with the provided glyph.
+     *
+     * <p>If the given component exceeds the containers length it will be returned.</p>
      *
      * @param component     the component to center
      * @param paddingGlyph  the glyph to pad with
@@ -136,6 +144,8 @@ public final class ComponentSpacer {
     /**
      * Center aligns the component by padding it with the provided glyph.
      *
+     * <p>If the given component exceeds the containers length it will be returned.</p>
+     *
      * @param component     the component to center
      * @param paddingGlyph  the glyph to pad with
      * @param widthProvider the width provider to use
@@ -153,6 +163,8 @@ public final class ComponentSpacer {
 
     /**
      * Right aligns the component by padding it with the provided glyph.
+     *
+     * <p>If the given component exceeds the containers length it will be returned.</p>
      *
      * @param component     the component to center
      * @param paddingGlyph  the glyph to pad with
@@ -178,6 +190,8 @@ public final class ComponentSpacer {
     /**
      * Right aligns the component by padding it with the smallest space in the given width provider.
      *
+     * <p>If the given component exceeds the containers length it will be returned.</p>
+     *
      * @param component     the component to center
      * @param widthProvider the width provider to use
      * @param containerWidth the container width
@@ -197,6 +211,8 @@ public final class ComponentSpacer {
     /**
      * Right aligns the component by padding it with the provided glyph.
      *
+     * <p>If the given component exceeds the containers length it will be returned.</p>
+     *
      * @param component     the component to center
      * @param paddingGlyph  the glyph to pad with
      * @param widthProvider the width provider to use
@@ -214,6 +230,8 @@ public final class ComponentSpacer {
 
     /**
      * Justifies the given component padding with the provided glyph.
+     *
+     * <p>If the given component exceeds the containers length it will be returned.</p>
      *
      * @param component      the component to justify
      * @param paddingGlyph   the glyph to pad with
@@ -262,6 +280,8 @@ public final class ComponentSpacer {
     /**
      * Justifies the given component padding it with the smallest space in the given width provider.
      *
+     * <p>If the given component exceeds the containers length it will be returned.</p>
+     *
      * @param component      the component to justify
      * @param widthProvider  the width provider to use
      * @param containerWidth the container width
@@ -281,6 +301,8 @@ public final class ComponentSpacer {
     /**
      * Justifies the given component.
      *
+     * <p>If the given component exceeds the containers length it will be returned.</p>
+     *
      * @param component     the component to justify
      * @param widthProvider the width provider to use
      * @return the justified component
@@ -294,6 +316,8 @@ public final class ComponentSpacer {
      * Splits the components between the left and the right.
      * The left component will be left aligned while the right component will be right aligned.
      *
+     * <p>If combined components exceed the containers length they will be split with a single space.</p>
+     *
      * @param leftComponent  the component to be on the left
      * @param rightComponent the component to be on the right
      * @param widthProvider  the width provider to use
@@ -306,11 +330,11 @@ public final class ComponentSpacer {
                                   final TextWidthProvider widthProvider,
                                   final float containerWidth,
                                   final Locale locale) {
-        final int spacesNeeded = findNeededPaddingCount(leftComponent.append(rightComponent),
+        final int spacesNeeded = Math.max(1, findNeededPaddingCount(leftComponent.append(rightComponent),
                 new StyledGlyph(' '),
                 widthProvider,
                 containerWidth,
-                locale);
+                locale));
 
         return Component.text()
                 .append(leftComponent)
@@ -322,6 +346,8 @@ public final class ComponentSpacer {
     /**
      * Splits the components between the left and the right.
      * The left component will be left aligned while the right component will be right aligned.
+     *
+     * <p>If combined components exceed the containers length they will be split with a single space.</p>
      *
      * @param leftComponent  the component to be on the left
      * @param rightComponent the component to be on the right
@@ -342,8 +368,7 @@ public final class ComponentSpacer {
                                               final float containerWidth,
                                               final Locale locale) {
         final float componentWidth = widthProvider.widthOf(component, locale);
-        if (componentWidth > containerWidth)
-            throw new IllegalArgumentException("Width of component exceeds the container width of " + containerWidth);
+        if (componentWidth > containerWidth) return 0;
 
         final float paddingGlyphWidth = widthProvider.widthOf(paddingGlyph);
         if (paddingGlyphWidth == 0)
