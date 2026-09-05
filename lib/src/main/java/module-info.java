@@ -5,7 +5,7 @@ module chasm.chasm.lib.main {
     requires transitive org.checkerframework.checker.qual;
     requires transitive org.jetbrains.annotations;
     requires transitive org.jspecify;
-    requires transitive net.kyori.adventure; // To be fixed in Adventure 5.0
+    requires transitive net.kyori.adventure.api; // To be fixed in Adventure 5.0
     requires transitive net.kyori.adventure.key;
 
     requires com.google.common;

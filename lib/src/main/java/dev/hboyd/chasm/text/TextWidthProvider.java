@@ -45,7 +45,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Provides width calculation of text.
  */
-public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidthProvider.Builder> {
+public class TextWidthProvider implements Buildable<TextWidthProvider.Builder> {
     /**
      * Default instance with the default font as <code>minecraft:default</code> and using the global font registry.
      */
@@ -268,7 +268,7 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
     /**
      * The builder for {@link TextWidthProvider}.
      */
-    public static class Builder implements Buildable.Builder<TextWidthProvider>, AbstractBuilder<TextWidthProvider> {
+    public static class Builder implements AbstractBuilder<TextWidthProvider> {
         private MinecraftFontRegistry fontRegistry;
         private Key defaultFont;
 
