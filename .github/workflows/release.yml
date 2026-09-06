@@ -4,9 +4,12 @@ on:
     tags: [ 'v*.*.**' ]
     branches:
       - master
+      - adventure4
 jobs:
   tag-snapshot:
     uses:  "hboyd2003/github-ci/.github/workflows/tag-snapshot.yml@master"
+    with:
+      tag-name: "${{ github.ref == 'refs/heads/adventure4' && 'snapshot-adventure4' || 'snapshot' }}"
     permissions:
       contents: "write"
     secrets: "inherit"
@@ -16,5 +19,5 @@ jobs:
     permissions:
       contents: "write"
     with:
-      tag_name: "${{ startsWith(github.ref, 'refs/tags/v') && github.ref || 'snapshot' }}"
+      tag_name: "${{ startsWith(github.ref, 'refs/tags/v') && github.ref || (github.ref == 'refs/heads/adventure4' && 'snapshot-adventure4' || 'snapshot') }}"
     secrets: "inherit"
