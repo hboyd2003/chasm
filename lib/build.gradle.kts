@@ -16,4 +16,8 @@ dependencies {
 indra {
     publishReleasesTo("hboydDev", "https://repo.hboyd.dev/releases")
     publishSnapshotsTo("hboydDev", "https://repo.hboyd.dev/snapshots")
+
+    configurePublications {
+        version = project.version.toString()
+    }
 }
