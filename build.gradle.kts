@@ -7,6 +7,7 @@ plugins {
 }
 
 gitSimpleSemver {
+    preReleaseIdentifierProviders = listOf(textProvider("SNAPSHOT").onlyIfNotRelease())
     buildIdentifierProviders.add(textProvider("adventure4")) // Always identify build as adventure 4
 }
 
