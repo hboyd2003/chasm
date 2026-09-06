@@ -8,6 +8,11 @@ Chasm provides the ability to calculate the display width of any text using any 
 simplified version of Minecraft's default font but provided with a resource pack it can load the fonts within and
 provide width calculations for them. For loading of all of Minecraft's default fonts the chasm-plugin is available.
 
+## About this branch
+
+This branch uses Adventure 4. Depending on Mod/Plugin framework/api used the Minecraft versions that this branch is
+compatible with may differ. In general this version should work with Minecraft 26.1.2 and earlier.
+
 ## Usage
 
 Use Chasm as a library dependency from your Gradle project.
