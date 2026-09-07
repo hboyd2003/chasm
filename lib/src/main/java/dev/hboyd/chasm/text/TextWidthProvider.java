@@ -37,7 +37,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicReference;
@@ -191,7 +190,7 @@ public class TextWidthProvider implements Buildable<TextWidthProvider.Builder> {
      * @return the rendered width of the codepoint or default
      * @throws IllegalArgumentException when an unknown font is specified
      */
-    public float widthOf(final int codepoint, final Style style) throws NoSuchElementException {
+    public float widthOf(final int codepoint, final Style style) {
         final Key fontKey = Optional.ofNullable(style.font()).orElse(this.defaultFont);
         final MinecraftFont font = this.fontRegistry.getFont(fontKey);
         if (font == null)
