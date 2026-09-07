@@ -215,16 +215,19 @@ public final class MinecraftFontGenerator {
                             throw new IllegalStateException("Specified unihex file " + hexZipKey + " not does exist");
 
                         try (final ZipFile zipFile = new ZipFile(hexZipPath.toFile())) {
-                            zipFile.stream()
+                            final List<UnihexDefinitionProvider> unihexDefinitionProviders = zipFile.stream()
                                     .parallel()
                                     .filter(zipEntry -> zipEntry.getName().endsWith(".hex"))
-                                    .forEach(zipEntry -> {
+                                    .map(zipEntry -> {
                                         try {
-                                            glyphDefinitionProviders.add(new UnihexDefinitionProvider(hexZipPath.resolve(zipEntry.getName())));
+                                            return new UnihexDefinitionProvider(hexZipPath.resolve(zipEntry.getName()));
                                         } catch (final IOException e) {
-                                            throw new RuntimeException("Failed to load Unihex font for font " + fontKey, e);
+                                            throw new RuntimeException("Failed to load Unihex font for font " + fontKey,
+                                                    e);
                                         }
-                                    });
+                                    })
+                                    .toList();
+                            glyphDefinitionProviders.addAll(unihexDefinitionProviders);
                         }
                     }
                     case "ttf" -> {
