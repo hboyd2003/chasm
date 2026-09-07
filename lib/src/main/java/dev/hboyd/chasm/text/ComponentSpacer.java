@@ -254,7 +254,7 @@ public final class ComponentSpacer {
                 .count();
         if (whitespaceCount == 0) return component;
 
-        final String spacesPerWhitespace = " ".repeat(Math.toIntExact(spacesNeeded / whitespaceCount));
+        final String spacesPerWhitespace = paddingGlyph.toString().repeat(Math.toIntExact(spacesNeeded / whitespaceCount));
         int remainder = spacesNeeded % whitespaceCount;
 
         int depth = 0;
@@ -263,7 +263,7 @@ public final class ComponentSpacer {
             if (depth == 0 && Character.isWhitespace(codepoint)) {
                 builder.append(spacesPerWhitespace);
                 if (remainder > 0) {
-                    builder.append(" ");
+                    builder.append(paddingGlyph);
                     remainder--;
                 }
             } else if (codepoint == '<')
