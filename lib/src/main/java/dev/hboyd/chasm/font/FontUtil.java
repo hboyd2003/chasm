@@ -76,7 +76,7 @@ public final class FontUtil {
         return fontRegistry.fonts().stream()
                 .map(font -> font.getSpaceCodepoints().entrySet().stream()
                         .filter(entry -> entry.getValue() < 0)
-                        .min(Map.Entry.comparingByValue())
+                        .max(Map.Entry.comparingByValue())
                         .map(entry -> Map.entry(new StyledGlyph(entry.getKey(), Style.empty().font(font.key())),
                                 entry.getValue())))
                 .filter(Optional::isPresent)
