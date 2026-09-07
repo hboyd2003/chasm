@@ -79,9 +79,9 @@ public class MinecraftFont implements Keyed, GlyphDefinitionProvider {
 
     @Override
     public @Unmodifiable Map<Integer, Float> getSpaceCodepoints() {
-        return this.references.reversed().stream()
+        return this.references.stream()
                 .flatMap(reference -> reference.getSpaceCodepoints().entrySet().stream())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (existingCodepoint, _) -> existingCodepoint));
     }
 
     /**
