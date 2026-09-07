@@ -22,4 +22,5 @@ module chasm.chasm.lib.main {
     exports dev.hboyd.chasm.font;
     exports dev.hboyd.chasm.font.provider;
     exports dev.hboyd.chasm.text;
+    exports dev.hboyd.chasm.configurate;
 }
