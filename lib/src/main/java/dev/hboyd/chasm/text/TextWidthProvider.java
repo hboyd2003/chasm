@@ -149,7 +149,7 @@ public class TextWidthProvider implements Buildable<TextWidthProvider, TextWidth
         for (int i = 0; i < text.length(); i++) {
             final int codepoint = text.codePointAt(i);
             if (!codePointWidthMap.containsKey(codepoint)) {
-                codePointWidthMap.put(codepoint, font.tryGetWidthOf(i, style).orElse(NODEF_WIDTH));
+                codePointWidthMap.put(codepoint, font.tryGetWidthOf(codepoint, style).orElse(NODEF_WIDTH));
             }
         }
 
