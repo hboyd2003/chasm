@@ -46,8 +46,7 @@ public final class FontUtil {
                         .min(Map.Entry.comparingByValue())
                         .map(entry -> Map.entry(new StyledGlyph(entry.getKey(), Style.empty().font(font.key())),
                                 entry.getValue())))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+                .flatMap(Optional::stream)
                 .min(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey);
     }
@@ -79,8 +78,7 @@ public final class FontUtil {
                         .max(Map.Entry.comparingByValue())
                         .map(entry -> Map.entry(new StyledGlyph(entry.getKey(), Style.empty().font(font.key())),
                                 entry.getValue())))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+                .flatMap(Optional::stream)
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey);
     }
