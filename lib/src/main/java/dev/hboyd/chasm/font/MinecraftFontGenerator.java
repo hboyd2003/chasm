@@ -168,7 +168,7 @@ public final class MinecraftFontGenerator {
                     case "reference" -> {
                         final Key providerFontKey = Key.key(provider.get("id").getAsString());
                         MinecraftFont providerFont = fontRegistry.getFont(providerFontKey);
-                        if (providerFontKey == fontKey)
+                        if (providerFontKey.equals(fontKey))
                             throw new IllegalArgumentException("Referenced font must not be self");
 
                         if (providerFont == null) {
