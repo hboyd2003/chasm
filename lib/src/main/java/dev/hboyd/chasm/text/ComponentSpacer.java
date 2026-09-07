@@ -371,8 +371,8 @@ public final class ComponentSpacer {
         if (componentWidth > containerWidth) return 0;
 
         final float paddingGlyphWidth = widthProvider.widthOf(paddingGlyph);
-        if (paddingGlyphWidth == 0)
-            throw new IllegalArgumentException("Width of padding glyph cannot be 0");
+        if (paddingGlyphWidth <= 0)
+            throw new IllegalArgumentException("Width of padding glyph must be non-positive (<= 0)");
 
         return (int) ((containerWidth - componentWidth) / paddingGlyphWidth);
     }
