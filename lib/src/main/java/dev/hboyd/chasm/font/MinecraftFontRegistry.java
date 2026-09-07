@@ -24,9 +24,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jspecify.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A registry of {@link MinecraftFont}.
@@ -43,14 +42,14 @@ public class MinecraftFontRegistry {
         GLOBAL.addFont(MinecraftFont.BUILTIN);
     }
 
-    private final Map<Key, MinecraftFont> fontMap;
+    private final ConcurrentHashMap<Key, MinecraftFont> fontMap;
 
     /**
      * Creates a new empty Minecraft font registry.
      */
     @Contract(pure = true)
     public MinecraftFontRegistry() {
-        this.fontMap = new HashMap<>();
+        this.fontMap = new ConcurrentHashMap<>();
     }
 
     /**
