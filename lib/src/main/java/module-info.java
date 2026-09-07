@@ -7,11 +7,11 @@ module chasm.chasm.lib.main {
     requires transitive org.jspecify;
     requires transitive net.kyori.adventure; // To be fixed in Adventure 5.0
     requires transitive net.kyori.adventure.key;
+    requires transitive java.desktop;
 
     requires com.google.common;
     requires com.google.gson;
     requires java.datatransfer;
-    requires java.desktop;
     requires net.kyori.adventure.text.minimessage;
     requires net.kyori.examination.api;
     requires org.spongepowered.configurate;
