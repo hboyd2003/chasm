@@ -254,7 +254,7 @@ public final class ComponentSpacer {
                 .count();
         if (whitespaceCount == 0) return component;
 
-        final String spacesPerWhitespace = paddingGlyph.toString().repeat(Math.toIntExact(spacesNeeded / whitespaceCount));
+        final String spacesPerWhitespace = paddingGlyph.toString().repeat(spacesNeeded / whitespaceCount);
         int remainder = spacesNeeded % whitespaceCount;
 
         int depth = 0;
@@ -372,7 +372,7 @@ public final class ComponentSpacer {
 
         final float paddingGlyphWidth = widthProvider.widthOf(paddingGlyph);
         if (paddingGlyphWidth <= 0)
-            throw new IllegalArgumentException("Width of padding glyph must be non-positive (<= 0)");
+            throw new IllegalArgumentException("Width of padding glyph must be positive (> 0)");
 
         return (int) ((containerWidth - componentWidth) / paddingGlyphWidth);
     }
