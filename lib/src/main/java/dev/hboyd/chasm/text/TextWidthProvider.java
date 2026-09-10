@@ -33,6 +33,7 @@ import net.kyori.adventure.util.Buildable;
 import org.checkerframework.common.returnsreceiver.qual.This;
 import org.jetbrains.annotations.Contract;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -51,6 +52,15 @@ public class TextWidthProvider implements Buildable<TextWidthProvider.Builder> {
     public static final TextWidthProvider DEFAULT = new TextWidthProvider();
 
     private static final float NODEF_WIDTH = 9.0f;
+    private static final Method COMPONENT_FLATTENER_TO_BUILDER; // Used to workaround for differences between Adventure 4 and 5 "toBuilder" declarations differences
+
+    static {
+        try {
+            COMPONENT_FLATTENER_TO_BUILDER = ComponentFlattener.class.getMethod("toBuilder");
+        } catch (final NoSuchMethodException e) {
+            throw new ExceptionInInitializerError(e);
+        }
+    }
 
     private final MinecraftFontRegistry fontRegistry;
     private final Key defaultFont;
@@ -240,7 +250,7 @@ public class TextWidthProvider implements Buildable<TextWidthProvider.Builder> {
 
     @Contract("_ -> new")
     private static ComponentFlattener buildFlattener(final Locale locale) {
-        return ComponentFlattener.basic().toBuilder()
+        return basicComponentFlattenerBuilder()
                 .complexMapper(TranslatableComponent.class, (component, componentConsumer) -> {
                     final Component renderedComponent = GlobalTranslator.render(component.children(List.of()), locale);
                     // We need to check if the translation failed to render
@@ -252,6 +262,16 @@ public class TextWidthProvider implements Buildable<TextWidthProvider.Builder> {
                     } else componentConsumer.accept(renderedComponent);
                 })
                 .build();
+    }
+
+    @Contract(" -> new")
+    private static ComponentFlattener.Builder basicComponentFlattenerBuilder() {
+        try {
+            // A workaround for differences between Adventure 4 and 5 "toBuilder" declarations differences which cause issues at runtime when running with Adventure 4.
+            return (ComponentFlattener.Builder) COMPONENT_FLATTENER_TO_BUILDER.invoke(ComponentFlattener.basic());
+        } catch (final ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
