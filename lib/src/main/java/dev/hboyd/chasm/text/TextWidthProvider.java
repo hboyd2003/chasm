@@ -29,7 +29,6 @@ import net.kyori.adventure.text.flattener.ComponentFlattener;
 import net.kyori.adventure.text.flattener.FlattenerListener;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.translation.GlobalTranslator;
-import net.kyori.adventure.util.Buildable;
 import org.checkerframework.common.returnsreceiver.qual.This;
 import org.jetbrains.annotations.Contract;
 
@@ -45,7 +44,8 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Provides width calculation of text.
  */
-public class TextWidthProvider implements Buildable<TextWidthProvider.Builder> {
+// TODO: Implement net.kyori.adventure.util.Buildable when Adventure 4 is deprecated.
+public class TextWidthProvider {
     /**
      * Default instance with the default font as <code>minecraft:default</code> and using the global font registry.
      */
@@ -243,7 +243,12 @@ public class TextWidthProvider implements Buildable<TextWidthProvider.Builder> {
         return this.defaultFont;
     }
 
-    @Override
+    /**
+     * Create a new builder using this.
+     *
+     * @return a builder
+     */
+    @Contract(" -> new")
     public Builder toBuilder() {
         return new Builder(this);
     }
