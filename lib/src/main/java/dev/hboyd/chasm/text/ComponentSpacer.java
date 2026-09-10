@@ -22,7 +22,6 @@ import dev.hboyd.chasm.UIContainer;
 import dev.hboyd.chasm.font.FontUtil;
 import dev.hboyd.chasm.font.StyledGlyph;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
@@ -56,11 +55,9 @@ public final class ComponentSpacer {
                                       final Locale locale) {
         final int paddingCount = findNeededPaddingCount(component, paddingGlyph, widthProvider, containerWidth, locale);
 
-        return Component.text()
-                .append(component)
-                .append(Component.text(Character.toString(paddingGlyph.codepoint())
-                        .repeat(paddingCount), paddingGlyph.style()))
-                .build();
+        return Component.textOfChildren(component,
+                Component.text(Character.toString(paddingGlyph.codepoint())
+                        .repeat(paddingCount), paddingGlyph.style()));
     }
 
     /**
@@ -130,15 +127,11 @@ public final class ComponentSpacer {
                 Character.toString(paddingGlyph.codepoint()).repeat((int) (paddingGlyphCount / 2)),
                 paddingGlyph.style());
 
-        final TextComponent.Builder builder = Component.text()
-                .append(paddingComponent)
-                .append(component)
-                .append(paddingComponent);
-
+        // TODO: Use a builder here once Adventure 4 is deprecated.
         if (paddingGlyphCount % 2 >= 1)
-            builder.append(paddingGlyph.asComponent());
+            return Component.textOfChildren(paddingComponent, component, paddingComponent, paddingGlyph.asComponent());
 
-        return builder.build();
+        return Component.textOfChildren(paddingComponent, component, paddingComponent);
     }
 
     /**
@@ -180,11 +173,9 @@ public final class ComponentSpacer {
                                        final Locale locale) {
         final int paddingCount = findNeededPaddingCount(component, paddingGlyph, widthProvider, containerWidth, locale);
 
-        return Component.text()
-                .append(Component.text(Character.toString(paddingGlyph.codepoint())
-                        .repeat(paddingCount), paddingGlyph.style()))
-                .append(component)
-                .build();
+        return Component.textOfChildren(
+                Component.text(Character.toString(paddingGlyph.codepoint()).repeat(paddingCount), paddingGlyph.style()),
+                component);
     }
 
     /**
@@ -336,11 +327,9 @@ public final class ComponentSpacer {
                 containerWidth,
                 locale));
 
-        return Component.text()
-                .append(leftComponent)
-                .append(Component.text(Character.toString(' ').repeat(spacesNeeded), Style.empty()))
-                .append(rightComponent)
-                .build();
+        return Component.textOfChildren(leftComponent,
+                Component.text(Character.toString(' ').repeat(spacesNeeded), Style.empty()),
+                rightComponent);
     }
 
     /**
