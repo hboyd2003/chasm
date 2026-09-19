@@ -16,6 +16,7 @@ dependencies {
 
 tasks {
     runServer {
+        dependsOn(publishToMavenLocal)
         minecraftVersion(libs.versions.minecraft.get())
     }
 
